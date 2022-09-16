@@ -16,11 +16,12 @@ class Vision:
     needle_h = 0
     method = None
 
-    def __init__(self, needle_img_path, method=cv.TM_CCOEFF_NORMED):
-        self.needle_img = cv.imread(needle_img_path, cv.IMREAD_UNCHANGED)
-        self.needle_w = self.needle_img.shape[1]
-        self.needle_h = self.needle_img.shape[0]
-        self.method = method
+    def __init__(self, needle_img_path = None, method=cv.TM_CCOEFF_NORMED):
+        if needle_img_path:
+            self.needle_img = cv.imread(needle_img_path, cv.IMREAD_UNCHANGED)
+            self.needle_w = self.needle_img.shape[1]
+            self.needle_h = self.needle_img.shape[0]
+            self.method = method
 
 
     def find(self, haystack_img, threshold = 0.5, xPosIn = 0, yPosIn = 0):

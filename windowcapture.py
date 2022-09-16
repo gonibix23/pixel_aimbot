@@ -13,21 +13,21 @@ class WindowCapture:
     yPosIn = 0
     hwnd = None
 
-    def __init__(self, window_name = None, xPosIni = 0, yPosIni = 0):
+    def __init__(self, window_name = None, width = 0, height = 0, xPosIni = 0, yPosIni = 0):
 
         if window_name is None:
             self.hwnd = win32gui.GetDesktopWindow()
             #win32gui.MoveWindow(self.hwnd, -(xPosIni), -(yPosIni), width, height, True)
+            self.w = width
+            self.h = height
         else:
             self.hwnd = win32gui.FindWindow(None, window_name)
             if not self.hwnd:
                 raise Exception("Window not found: {}".format(window_name))
-
-        window_rect = win32gui.GetWindowRect(self.hwnd)
+            window_rect = win32gui.GetWindowRect(self.hwnd)
+            self.w = window_rect[2]
+            self.h = window_rect[3]
         
-        self.w = window_rect[2]
-        self.h = window_rect[3]
-
         border_pixels = 0
         titlebar_pixels = 0
         

@@ -1,0 +1,3 @@
+Marcar Cuadrados: C:\Users\gonib\Downloads\opencv\build\x64\vc15\bin\opencv_annotation.exe --annotations=pos.txt --images=positive  
+Crear Vectores Positivos: C:\Users\gonib\Downloads\opencv\build\x64\vc15\bin\opencv_createsamples.exe -info pos.txt -w 24 -h 24 -num 500 -vec pos.vec  
+Entrenar IA: C:\Users\gonib\Downloads\opencv\build\x64\vc15\bin\opencv_traincascade.exe -data cascade/ -vec pos.vec -bg neg.txt -w 24 -h 24 -numPos 25 -numNeg 200 -numStages 14 -precalcValBufSize 6000 -precaclIdxBufSize 6000 -maxFalseAlarmRate 0.4 -minHitRate 0.999

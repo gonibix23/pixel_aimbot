@@ -13,21 +13,19 @@ keyboard = Controller()
 
 #WindowCapture.list_window_names()
 
-vision_item = Vision("albion_cabbage7.jpg")
+cascade_enemies = cv.CascadeClassifier("cascade/cascade.xml")
+vision_enemies = Vision()
 
-#vision_item.init_control_gui()
 def startWatching():
     toggle = 1
     loop_time = time()
+    wincap = WindowCapture(None, int(2*(win32api.GetSystemMetrics(0)/10)), int(2*(win32api.GetSystemMetrics(1)/10)), int(4*(win32api.GetSystemMetrics(0)/10)), int(4*(win32api.GetSystemMetrics(1)/10)))
     while(True):
         xPos, yPos = pyautogui.position()
         if toggle:
-            wincap = WindowCapture("Counter-Strike: Global Offensive - Direct3D 9")
             screenshot = wincap.get_screenshot()
-
-            #processed_image = vision_item.apply_hsv_filter(screenshot)
-
-            rectangles = vision_item.find(screenshot, 0.70, 0, 0)
+            rectangles = cascade_enemies.detectMultiScale(screenshot)
+            detection_image = vision_enemies.draw_rectangles(screenshot, rectangles)
             for rect in rectangles:
                 xPos, yPos = pyautogui.position()
                 xObj = int(rect[0]+(rect[2]/2))
@@ -35,24 +33,25 @@ def startWatching():
                 xCoe = (xObj-xPos)/100
                 yCoe = (yObj-yPos)/100
                 sensibilidad = 4.0
-                mov = 22*sensibilidad
+                mov = 20*sensibilidad
                 print("Inicial: x="+str(xPos)+", y="+str(yPos) + " Objetivo: x="+str(xObj)+", y="+str(yObj) + " Coeficiente: x="+str(xCoe)+", y="+str(yCoe))
-                print()
-                win32api.mouse_event(win32con.MOUSEEVENTF_ABSOLUTE | win32con.MOUSEEVENTF_MOVE, int(xCoe*mov), int(yCoe*mov))
+                #win32api.mouse_event(win32con.MOUSEEVENTF_ABSOLUTE | win32con.MOUSEEVENTF_MOVE, int(xCoe*mov), int(yCoe*mov))
                 xPos, yPos = pyautogui.position()
                 break
-            output_image = vision_item.draw_rectangles(screenshot, rectangles)
-
-            cv.imshow("Paint", output_image)
-            #cv.imshow("Processed", processed_image)
+            
+            cv.imshow("Paint", detection_image)
 
 
-            '''print("FPS {}".format(1/ (time() - loop_time)))'''
-            loop_time = time()
-        if cv.waitKey(1) & 0xFF == ord('n'):
+        print("FPS {}".format(1/ (time() - loop_time)))
+        loop_time = time()
+        if cv.waitKey(1) == ord('n'):
             toggle = 1
-        if cv.waitKey(1) & 0xFF == ord('m'):
+        if cv.waitKey(1) == ord('m'):
             toggle = 0
+        if cv.waitKey(1) == ord('f'):
+            cv.imwrite("positive/{}.jpg".format(loop_time), screenshot)
+        elif cv.waitKey(1) == ord('d'):
+            cv.imwrite("negative/{}.jpg".format(loop_time), screenshot)
 
 ventana = tkinter.Tk()
 ventana.geometry("400x200")
