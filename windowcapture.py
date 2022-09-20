@@ -1,3 +1,4 @@
+from turtle import width
 import numpy as np
 import win32gui, win32ui, win32con
 
@@ -75,3 +76,9 @@ class WindowCapture:
 
     def get_screen_position(self, pos):
             return (pos[0] + self.offset_x, pos[1] + self.offset_y)
+
+    def getW(self):
+        return self.w
+
+    def getH(self):
+        return self.h
